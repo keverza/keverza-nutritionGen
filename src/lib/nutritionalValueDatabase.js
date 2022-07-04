@@ -12,7 +12,7 @@ export const values = [
         salt: 0,
         calories: 884,
         joules: 3968,
-        weight: 0,
+        weight: 10,
         coef: 0
     },
     {        
@@ -27,7 +27,7 @@ export const values = [
         salt: 0,
         calories: 460,
         joules: 1924,
-        weight: 0,
+        weight: 10,
         coef: 0
     },
     {        
@@ -42,7 +42,7 @@ export const values = [
         salt: 0,
         calories: 396,
         joules: 1683,
-        weight: 0,
+        weight: 10,
         coef: 0
     },
     {        
@@ -57,7 +57,52 @@ export const values = [
         salt: 1.01,
         calories: 482,
         joules: 2016,
-        weight: 0,
+        weight: 10,
+        coef: 0
+    },
+    {        
+        name: "Druska",
+        id:5,
+        fat: 0,
+        fatSat: 0,
+        carbs: 0,
+        sugar:0,
+        fiber: 0,
+        protein: 0,
+        salt: 100,
+        calories: 0,
+        joules: 0,
+        weight: 10,
+        coef: 0
+    },
+    {        
+        name: "Sojų lecitinas",
+        id:6,
+        fat: 91,
+        fatSat: 12,
+        carbs: 8,
+        sugar:4,
+        fiber: 0,
+        protein: 0,
+        salt: 0.1,
+        calories: 851,
+        joules: 3503,
+        weight: 10,
+        coef: 0
+    },
+    {        
+        name: "Kava",
+        id:7,
+        fat: 16,
+        fatSat: 0,
+        carbs: 0,
+        sugar:0,
+        fiber: 32,
+        protein: 0,
+        salt: 0,
+        calories: 300,
+        joules: 1255,
+        weight: 10,
         coef: 0
     },
 
