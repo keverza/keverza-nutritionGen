@@ -1,4 +1,5 @@
 <script>
+	import { claim_html_tag } from 'svelte/internal';
 	import { values } from '../lib/nutritionalValueDatabase';
 
 	$: selectedIngredients = [];
@@ -29,10 +30,13 @@
 	);
 
 	$: isChanged = false;
-	const labelStyleFalse = 'flex flex-col border border-gray-500 p-6 rounded-md ';
-	const labelStyleTrue = 'flex flex-col border-1 border-red-500 p-6 rounded-md ';
+	const labelStyleFalse = 'flex flex-rov border border-gray-500 p-6 rounded-md ';
+	const labelStyleTrue = 'flex flex-row border border-red-500 p-6 rounded-md ';
 
-	function handleChange(ingredient) {
+	$: formProps = [];
+	const datetime = new Date().toLocaleString('lt-LT');
+
+	function handleChange() {
 		return (isChanged = true);
 	}
 
@@ -65,7 +69,7 @@
 
 	const handleForm = (e) => {
 		const formData = new FormData(e.target);
-		const formProps = Object.fromEntries(formData);
+		formProps = Object.fromEntries(formData);
 		let b = totalWeight;
 
 		const arrayOfArrays = Object.keys(formProps).map((element, index, array) => {
@@ -81,7 +85,13 @@
 			return el[0];
 		});
 
-		console.log(formProps, totalWeight, ingredientFractionArray);
+		console.log(
+			'props: ',
+			formProps,
+			totalWeight,
+			ingredientFractionArray,
+			Object.entries(formProps)
+		);
 
 		const valKeys = Object.keys(ingredientFractionArray[0]).filter((el) => el.startsWith('fr'));
 
@@ -95,10 +105,14 @@
 		console.log(nutritionalValueList);
 
 		isChanged = false;
+
+		setTimeout(() => {
+			window.print();
+		}, 100);
 	};
 </script>
 
-<div class="flex flex-row gap-3">
+<div class="flex flex-row gap-3 no-print">
 	{#each values as ingredient (ingredient.id)}
 		<button class="form-control">
 			<label class="label cursor-pointer relative ">
@@ -114,80 +128,99 @@
 		</button>
 	{/each}
 </div>
-<hr />
-{#if selectedIngredients.length}
-	<article>
-		<form on:submit|preventDefault={handleForm}>
-			<h1 class="pt-4">Sunaudotų produktų kiekis gramais:</h1>
-			{#each editIngr as ele}
-				<div class="flex flex-row min-w-fit items-center justify-center">
-					<label for={ele.id} class="input-group my-2">
-						<span class="w-40">{ele.name}: </span>
 
-						<input
-							id={ele.name}
-							name={ele.name}
-							bind:value={ele.weight}
-							on:change={() => handleChange(ele)}
-							min="1"
-							type="number"
-							placeholder="Sunaudotas kiekis"
-							class="input input-bordered max-w-xs"
-						/>
-						<span class="w-20">
-							{Math.round((ele.weight / totalWeight) * 1000) / 1000} %
-						</span>
-					</label>
-				</div>
-			{/each}
-			<button class="border rounded-lg py-2 px-4 ">Submit</button>
-		</form>
-	</article>
-	<hr />
-	<article class="my-6 text-sm flex flex-row justify-center items-center gap-5">
-		<p class="flex flex-col items-center justify-between">
-			Bendras svoris: <span class="font-bold text-lg py-6 px-6 border rounded-lg border-gray-500"
-				>{totalWeight}g</span
-			>
-		</p>
-		<p class="flex flex-col items-center justify-between">
-			Kakavos kiekis: <span class="font-bold text-lg"
-				><div class="radial-progress" style="--value:{totalCacao};">{totalCacao}%</div>
-			</span>
-		</p>
-	</article>
-{/if}
+<section>
+	{#if selectedIngredients.length}
+		<article class="no-print">
+			<form on:submit|preventDefault={handleForm}>
+				<h1 class="pt-4">Įveskite produktų kiekis gramais:</h1>
+				{#each editIngr as ele}
+					<div class="flex flex-row min-w-fit items-center justify-center">
+						<label for={ele.id} class="input-group my-2">
+							<span class="w-40">{ele.name}: </span>
+							<input
+								id={ele.name}
+								name={ele.name}
+								bind:value={ele.weight}
+								on:change={handleChange}
+								min="1"
+								type="number"
+								placeholder="Sunaudotas kiekis"
+								class="input input-bordered max-w-xs"
+							/>
+							<span class="w-20">
+								{Math.round((ele.weight / totalWeight) * 1000) / 1000} %
+							</span>
+						</label>
+					</div>
+				{/each}
+				<button
+					class="border border-amber-800 rounded-lg py-2 px-4 hover:bg-amber-100 text-amber-800 "
+					>Skaičiuoti</button
+				>
+			</form>
+		</article>
 
-{#if nutritionalValueList.frfat}
-	<div class={isChanged ? labelStyleTrue : labelStyleFalse}>
-		<h3>
-			100g energetine verte:
-			<span class="font-bold min-w-fit">
-				{nutritionalValueList.frcalories} kCal/ {nutritionalValueList.frjoules} kJ
-			</span>
-		</h3>
-		<div class="flex flex-row justify-center items-center">
-			<ul class="w-40">
-				<li>Riebalai:</li>
-				<li>Iš jų sočiųjų riebalų:</li>
-				<li>Angliavandeniai:</li>
-				<li>Iš jų cukrų:</li>
-				<li>Skaidulos:</li>
-				<li>Baltymai:</li>
-				<li>Druska:</li>
-			</ul>
-			<ul class="w-30">
-				<li>{nutritionalValueList.frfat} g</li>
-				<li>{nutritionalValueList.frfatSat} g</li>
-				<li>{nutritionalValueList.frcarbs} g</li>
-				<li>{nutritionalValueList.frsugar} g</li>
-				<li>{nutritionalValueList.frfiber} g</li>
-				<li>{nutritionalValueList.frprotein} g</li>
-				<li>{nutritionalValueList.frsalt} g</li>
-			</ul>
+		<article class="my-6 text-sm flex flex-row justify-start items-start gap-5">
+			<div class="flex-col flex justify-start">
+				<p class="flex flex-col"><small>Partijos numeris:</small> <span>{datetime}</span></p>
+				<p class="flex flex-col">
+					<small>Pavadinimas:</small>
+					<span contenteditable="true" class="font-bold tracking-widest uppercase">sokoladas</span>
+				</p>
+			</div>
+			<p class="flex flex-col items-start ">
+				<small>Bendras svoris: </small>
+				<span class="font-bold text-lg py-6 px-6 border rounded-lg border-gray-500"
+					>{totalWeight}g</span
+				>
+			</p>
+			<p class="flex flex-col items-start ">
+				<small>Kakavos kiekis: </small>
+				<span class="font-bold text-lg"
+					><div class="radial-progress" style="--value:{totalCacao};">{totalCacao}%</div>
+				</span>
+			</p>
+		</article>
+	{/if}
+
+	{#if nutritionalValueList.frfat}
+		<div class={isChanged ? labelStyleTrue : labelStyleFalse}>
+			<div class="flex flex-row justify-center items-center">
+				<ul class="w-42">
+					<li>100g energetine verte:</li>
+					<li>Riebalai:</li>
+					<li>Iš jų sočiųjų riebalų:</li>
+					<li>Angliavandeniai:</li>
+					<li>Iš jų cukrų:</li>
+					<li>Skaidulos:</li>
+					<li>Baltymai:</li>
+					<li>Druska:</li>
+				</ul>
+				<ul class="w-30 p-2 border-r">
+					<li>{nutritionalValueList.frcalories} kCal/ {nutritionalValueList.frjoules} kJ</li>
+					<li>{nutritionalValueList.frfat} g</li>
+					<li>{nutritionalValueList.frfatSat} g</li>
+					<li>{nutritionalValueList.frcarbs} g</li>
+					<li>{nutritionalValueList.frsugar} g</li>
+					<li>{nutritionalValueList.frfiber} g</li>
+					<li>{nutritionalValueList.frprotein} g</li>
+					<li>{nutritionalValueList.frsalt} g</li>
+				</ul>
+			</div>
+			<div>
+				<h6 class="px-2 pt-2 text-xs">Sunaudoti produktai:</h6>
+				{#each Object.entries(formProps) as [ingredient, quantity]}
+					<ul class="pt-2 px-2">
+						<li class="flex flex-row justify-between">
+							<span>{ingredient}: </span><span class="font-bold px-2">{quantity} g</span>
+						</li>
+					</ul>
+				{/each}
+			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
+</section>
 
 <style>
 	.w-30 > li {
