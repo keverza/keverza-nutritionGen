@@ -7,4 +7,7 @@
 		.no-print {
 			display: none;			
 		}
+
+		.print {size: A5 portrait;}
+		
 	}
