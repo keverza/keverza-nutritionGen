@@ -105,6 +105,66 @@ export const values = [
         weight: 10,
         coef: 0
     },
+    {        
+        name: "Lazdynai",
+        id:8,
+        fat: 61.15,
+        fatSat: 4.6,
+        carbs: 17,
+        sugar:3.49,
+        fiber: 10,
+        protein: 13.7,
+        salt: 0.009,
+        calories: 629,
+        joules: 2654,
+        weight: 10,
+        coef: 0
+    },
+    {        
+        name: "Migdolai",
+        id:9,
+        fat: 54.1,
+        fatSat: 4.22,
+        carbs: 10,
+        sugar:6.9,
+        fiber: 3,
+        protein: 24.1,
+        salt: 0.025,
+        calories: 623,
+        joules: 2608,
+        weight: 10,
+        coef: 0
+    },   
+     {        
+        name: "PrOatein",
+        id:10,
+        fat: 13,
+        fatSat: 2.6,
+        carbs: 26,
+        sugar:0.7,
+        fiber: 4.6,
+        protein: 52.5,
+        salt: 0.1,
+        calories: 423,
+        joules: 1770,
+        weight: 10,
+        coef: 0
+    },
+    {        
+        name: "Ghee sviestas",
+        id:11,
+        fat: 99.8,
+        fatSat: 65.8,
+        carbs: 0.1,
+        sugar:0.1,
+        fiber: 0.1,
+        protein: 0.1,
+        salt: 0.1,
+        calories: 898,
+        joules: 3693,
+        weight: 10,
+        coef: 0
+    },
 
 ]
 
